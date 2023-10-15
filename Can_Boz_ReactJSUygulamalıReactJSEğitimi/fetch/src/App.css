@@ -27,9 +27,15 @@
   }
 }
 
+span{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 @media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+   .icon {
+    animation: logo-spin infinite 1s linear;
   }
 }
 
