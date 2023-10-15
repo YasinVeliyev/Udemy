@@ -1,35 +1,27 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Component } from "react";
+import Child from "./Child";
 
-function App() {
-  const [count, setCount] = useState(0)
+import "./App.css";
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+class App extends Component {
+	constructor(props) {
+		super(props);
+		this.state = { favoriteColor: "green" };
+	}
+
+	//WARNING! To be deprecated in React v17. Use componentDidMount instead.
+	componentWillMount() {
+		console.log("Selamla");
+	}
+
+	render() {
+		return (
+			<div className="App">
+				<h1>My Favorite Color is {this.state.favoriteColor}</h1>
+				<Child />
+			</div>
+		);
+	}
 }
 
-export default App
+export default App;
