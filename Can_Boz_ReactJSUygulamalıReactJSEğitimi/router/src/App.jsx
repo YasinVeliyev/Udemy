@@ -1,35 +1,63 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Component } from "react";
+import News from "./News";
 
-function App() {
-  const [count, setCount] = useState(0)
+import "./App.css";
+import Profile from "./Profile";
+import Error404 from "./Error404";
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+import { BrowserRouter, Route, Routes, NavLink, Navigate } from "react-router-dom";
+
+class App extends Component {
+	constructor(props) {
+		super(props);
+		this.state = { loggedIn: false };
+		this.auth = this.auth.bind(this);
+	}
+
+	auth() {
+		this.setState((prevState) => ({
+			loggedIn: !prevState.loggedIn,
+		}));
+	}
+
+	render() {
+		return (
+			<BrowserRouter>
+				<div>
+					<div className="ui secondary  menu">
+						<NavLink to="/" className={"item"}>
+							Ana Sayfa
+						</NavLink>
+						<NavLink to="/iletisim" className={"item"}>
+							Əlaqə
+						</NavLink>
+						<NavLink to="/news" className={"item"}>
+							Xəbərlər
+						</NavLink>
+						<NavLink to="/profile" className={"item"}>
+							Profile
+						</NavLink>
+					</div>
+
+					<Routes>
+						<Route path="/" element={<h1>Hello React</h1>} />
+						<Route path="/iletisim" element={<h1>Əlaqə</h1>} />
+						<Route path="/news" element={<News />} />
+						<Route path="/news/:id" element={<News />} />
+						<Route path="/profile" element={this.state.loggedIn ? <Profile /> : <Navigate to="/" replace />} />
+						<Route path="*" element={<Error404 />} />
+					</Routes>
+				</div>
+
+				<input
+					type="button"
+					className="ui green button"
+					value={this.state.loggedIn ? "Log Out" : "Login"}
+					onClick={() => this.setState((prevState) => ({ loggedIn: !prevState.loggedIn }))}
+				/>
+			</BrowserRouter>
+		);
+	}
 }
 
-export default App
+export default App;
