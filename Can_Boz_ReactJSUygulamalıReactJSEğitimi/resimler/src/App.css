@@ -1,8 +1,10 @@
 #root {
   max-width: 1280px;
+  min-width: 720px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+ 
 }
 
 .logo {
@@ -39,4 +41,23 @@
 
 .read-the-docs {
   color: #888;
+}
+
+.imageList{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px,1fr));
+ 
+ 
+  grid-auto-rows: 1px;
+  
+}
+
+
+
+.searchBox{
+  margin-bottom: 10px;
+}
+
+img{
+  width: 400px;
 }
