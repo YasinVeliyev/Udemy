@@ -1,7 +1,7 @@
 const { Sequelize, DataTypes, Model } = require("sequelize");
 const sequelize = require("./connect")();
 
-const Departments = sequelize.define("departments", {
+const Department = sequelize.define("departments", {
 	department_id: {
 		type: DataTypes.INTEGER,
 		allowNull: false,
@@ -18,4 +18,4 @@ const Departments = sequelize.define("departments", {
 
 // Departments.sync({ force: true });
 
-module.exports = Departments;
+module.exports = Department;

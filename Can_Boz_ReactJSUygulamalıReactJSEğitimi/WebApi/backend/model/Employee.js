@@ -1,7 +1,8 @@
-const { DataTypes } = require("sequelize");
+const { DataTypes, Sequelize } = require("sequelize");
+const validator = require("validator");
 const sequelize = require("./connect")();
 
-const Employees = sequelize.define("employees", {
+const Employee = sequelize.define("employees", {
 	employee_id: {
 		type: DataTypes.INTEGER,
 		allowNull: false,
@@ -17,11 +18,17 @@ const Employees = sequelize.define("employees", {
 		type: DataTypes.STRING(100),
 		allowNull: false,
 		unique: true,
+		validate: { isEmail: true },
+	},
+	department: {
+		type: DataTypes.STRING(50),
+		allowNull: false,
 	},
 	doj: {
 		type: DataTypes.DATE,
 		allowNull: false,
+		defaultValue: Sequelize.NOW,
 	},
 });
-// Employees.sync({ force: true });
-module.exports = Employees;
+// Employee.sync({ force: true });
+module.exports = Employee;
