@@ -1,5 +1,11 @@
-import { Component, useState } from "react";
+import { Component } from "react";
+import { Button, Nav } from "react-bootstrap";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Navigation } from "./components/Navigation";
 
+import { Home } from "./components/Home";
+import { Employee } from "./components/Employee";
+import { Department } from "./components/Department";
 import "./App.css";
 
 class App extends Component {
@@ -9,7 +15,16 @@ class App extends Component {
 	render() {
 		return (
 			<>
-				<p className="read-the-docs">Click on the Vite and React logos to learn more</p>
+				<BrowserRouter>
+					<h3 className="m-3 d-flex justify-content-center">React js with Bootstrap</h3>
+					<h5 className="m-3 d-flex justify-content-center"> Employee Managment Portal</h5>
+					<Navigation />
+					<Routes>
+						<Route path="/" element={<Home />} />
+						<Route path="/employee" element={<Employee />} />
+						<Route path="/department" element={<Department />} />
+					</Routes>
+				</BrowserRouter>
 			</>
 		);
 	}

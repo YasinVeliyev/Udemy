@@ -4,6 +4,7 @@ const config = require("./config");
 function connect() {
 	const sequelize = new Sequelize(config.development.url, {
 		dialect: config.development.dialect,
+		logging: false,
 	});
 
 	sequelize
