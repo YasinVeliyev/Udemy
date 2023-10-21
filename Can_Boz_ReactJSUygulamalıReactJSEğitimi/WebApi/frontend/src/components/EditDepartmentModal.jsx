@@ -3,28 +3,27 @@ import { Modal, Button, Form, Container } from "react-bootstrap";
 import { PropTypes } from "prop-types";
 import { Snackbar, IconButton } from "@material-ui/core";
 
-export default class AddDepartmentModal extends Component {
+export default class EditDepartmentModal extends Component {
 	constructor(props) {
 		super(props);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.state = { snackbar: { open: false, msg: "", error: false } };
 		this.closeSnackbar = this.closeSnackbar.bind(this);
 	}
-	static propTypes = { onHide: PropTypes.func };
+	static propTypes = { onHide: PropTypes.func, department_id: PropTypes.number, department_name: PropTypes.string };
 
 	handleSubmit(event) {
 		event.preventDefault();
-		fetch(`${import.meta.env.VITE_API_URL}departments`, {
-			method: "POST",
+
+		fetch(`${import.meta.env.VITE_API_URL}departments/${this.props.department_id}`, {
+			method: "PUT",
 			headers: { "Content-Type": "application/json", Accept: "application/json" },
 			body: JSON.stringify({ name: event.target.department_name.value }),
 		})
 			.then((res) => res.json())
 			.then((data) => {
-				console.log(data);
-				if (data.status) {
-					this.setState({ snackbar: { open: true, msg: data.status } });
-					this.props.onHide();
+				if (data.success) {
+					this.setState({ snackbar: { open: true, msg: data.msg } });
 				} else {
 					throw data;
 				}
@@ -66,10 +65,28 @@ export default class AddDepartmentModal extends Component {
 							<Form onSubmit={this.handleSubmit}>
 								<Form.Group className="mb-3" controlId="formBasicEmail">
 									<Form.Label>Department Name</Form.Label>
-									<Form.Control type="text" placeholder="Enter Department Name" name="department_name" required />
+									<Form.Control
+										type="text"
+										placeholder="Enter Department Name"
+										name="department_name"
+										required
+										defaultValue={this.props.department_name}
+									/>
+								</Form.Group>
+
+								<Form.Group className="mb-3" controlId="formBasicEmail">
+									<Form.Label>Department Id</Form.Label>
+									<Form.Control
+										type="text"
+										placeholder="Enter Department Name"
+										name="department_id"
+										disabled
+										required
+										defaultValue={this.props.department_id}
+									/>
 								</Form.Group>
 								<Button variant="primary" type="submit">
-									Add
+									Update
 								</Button>
 							</Form>
 						</Container>

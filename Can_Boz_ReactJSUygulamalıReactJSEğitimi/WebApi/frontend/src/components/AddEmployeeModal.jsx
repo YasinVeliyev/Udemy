@@ -3,26 +3,45 @@ import { Modal, Button, Form, Container } from "react-bootstrap";
 import { PropTypes } from "prop-types";
 import { Snackbar, IconButton } from "@material-ui/core";
 
-export default class AddDepartmentModal extends Component {
+export default class AddEmployeeModal extends Component {
 	constructor(props) {
 		super(props);
 		this.handleSubmit = this.handleSubmit.bind(this);
-		this.state = { snackbar: { open: false, msg: "", error: false } };
+		this.state = { snackbar: { open: false, msg: "", error: false }, departments: [] };
 		this.closeSnackbar = this.closeSnackbar.bind(this);
 	}
 	static propTypes = { onHide: PropTypes.func };
 
+	componentDidMount() {
+		fetch("http://localhost:3000/api/departments")
+			.then((data) => data.json())
+			.then((departments) => {
+				this.setState({ departments });
+			})
+			.catch(console.error);
+	}
+
+	// shouldComponentUpdate(nextProps, nextState) {
+	// 	console.log(this.state, nextState, JSON.stringify(this.state) === JSON.stringify(nextState));
+	// 	return JSON.stringify(this.state) !== JSON.stringify(nextState);
+	// }
+
 	handleSubmit(event) {
 		event.preventDefault();
-		fetch(`${import.meta.env.VITE_API_URL}departments`, {
+		fetch(`${import.meta.env.VITE_API_URL}employees`, {
 			method: "POST",
 			headers: { "Content-Type": "application/json", Accept: "application/json" },
-			body: JSON.stringify({ name: event.target.department_name.value }),
+			body: JSON.stringify({
+				name: event.target.employee_name.value,
+				email: event.target.employee_email.value,
+				department: event.target.employee_department.value,
+				doj: event.target.employee_doj.value,
+			}),
 		})
 			.then((res) => res.json())
 			.then((data) => {
 				console.log(data);
-				if (data.status) {
+				if (data.status === "success") {
 					this.setState({ snackbar: { open: true, msg: data.status } });
 					this.props.onHide();
 				} else {
@@ -35,7 +54,7 @@ export default class AddDepartmentModal extends Component {
 	}
 
 	closeSnackbar() {
-		this.setState((prevState) => ({ snackbar: { ...prevState.snackbar, open: false, error: false } }));
+		this.setState((prevState) => ({ snackbar: { ...prevState.snackbar, open: true, error: false } }));
 	}
 
 	render() {
@@ -59,14 +78,30 @@ export default class AddDepartmentModal extends Component {
 				></Snackbar>
 				<Modal {...this.props} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
 					<Modal.Header closeButton>
-						<Modal.Title id="contained-modal-title-vcenter">Add Department</Modal.Title>
+						<Modal.Title id="contained-modal-title-vcenter">Add Employee</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
 						<Container>
 							<Form onSubmit={this.handleSubmit}>
 								<Form.Group className="mb-3" controlId="formBasicEmail">
-									<Form.Label>Department Name</Form.Label>
-									<Form.Control type="text" placeholder="Enter Department Name" name="department_name" required />
+									<Form.Label>Name</Form.Label>
+									<Form.Control type="text" placeholder="Enter  Name" name="employee_name" required />
+								</Form.Group>
+								<Form.Group className="mb-3" controlId="formBasicEmail">
+									<Form.Label>Email</Form.Label>
+									<Form.Control type="email" placeholder="Enter  Email" name="employee_email" required />
+								</Form.Group>
+								<Form.Group className="mb-3" controlId="formBasicEmail">
+									<Form.Label>Department</Form.Label>
+									<Form.Control as="select" name="employee_department">
+										{this.state.departments.map((department) => {
+											return <option key={department.department_id}>{department.name}</option>;
+										})}
+									</Form.Control>
+								</Form.Group>
+								<Form.Group className="mb-3" controlId="formBasicEmail">
+									<Form.Label>DOJ</Form.Label>
+									<Form.Control type="date" placeholder="Enter DOJ" name="employee_doj" required />
 								</Form.Group>
 								<Button variant="primary" type="submit">
 									Add

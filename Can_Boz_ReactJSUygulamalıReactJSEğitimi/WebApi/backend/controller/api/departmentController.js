@@ -9,8 +9,11 @@ exports.getDepartments = async (req, res) => {
 exports.createDepartment = async (req, res) => {
 	try {
 		const department = await Department.create({ name: req.body.name });
-		return res.status(201).json(department);
+		return res.status(201).json({ department, status: "Success" });
 	} catch (error) {
+		if (error.name === "SequelizeUniqueConstraintError") {
+			return res.status(404).json({ msg: "Department Already Exist", status: "fail" });
+		}
 		return res.status(500).json({ msg: "Failed to add department", status: "fail" });
 	}
 };
@@ -32,15 +35,16 @@ exports.updateDepartment = async (req, res) => {
 
 exports.deleteDepartment = async (req, res) => {
 	const { id: department_id } = req.params;
-
+	console.log(req.params);
 	try {
 		const deletedCount = await Department.destroy({ where: { department_id } });
+
 		if (deletedCount) {
 			return res.status(200).json({ status: "success" });
 		}
 		return res.status(404).json({ status: "failed", msg: "Department does not exist" });
 	} catch (error) {
-		return res.status(500).json({ msg: "Failed to delete department", status: "fail" });
+		return res.status(500).json({ msg: "Failed to delete department", status: "fail", error });
 	}
 };
 

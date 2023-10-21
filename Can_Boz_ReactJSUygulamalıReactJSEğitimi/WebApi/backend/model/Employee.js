@@ -25,10 +25,10 @@ const Employee = sequelize.define("employees", {
 		allowNull: false,
 	},
 	doj: {
-		type: DataTypes.DATE,
+		type: DataTypes.DATEONLY,
 		allowNull: false,
 		defaultValue: Sequelize.NOW,
 	},
 });
-// Employee.sync({ force: true });
+Employee.sync({ force: true });
 module.exports = Employee;
