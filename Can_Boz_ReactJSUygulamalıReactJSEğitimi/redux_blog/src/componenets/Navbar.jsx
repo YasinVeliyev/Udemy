@@ -2,15 +2,20 @@ import { Component } from "react";
 
 import { NavLink } from "react-router-dom";
 
-export default class Navbar extends Component {
+class Navbar extends Component {
+	constructor(props) {
+		super(props);
+		console.log(props);
+	}
 	render() {
 		return (
 			<div>
 				<nav>
 					<div className="nav-wrapper">
-						<a href="#" className="brand-logo">
-							<NavLink to="/">Home</NavLink>
-						</a>
+						<NavLink to="/" className="brand-logo">
+							Logo
+						</NavLink>
+
 						<ul id="nav-mobile" className="right hide-on-med-and-down">
 							<li>
 								<NavLink to="/">Home</NavLink>
@@ -29,3 +34,5 @@ export default class Navbar extends Component {
 		);
 	}
 }
+
+export default Navbar;

@@ -1,7 +1,10 @@
 import { Component } from "react";
+import { Rainbow } from "../hoc/Rainbow";
 
-export default class Contact extends Component {
+class Contact extends Component {
 	render() {
 		return <div className="container">Contact</div>;
 	}
 }
+
+export default Rainbow(Contact);
