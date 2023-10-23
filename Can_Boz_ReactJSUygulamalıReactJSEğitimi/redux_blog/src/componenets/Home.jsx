@@ -1,27 +1,19 @@
 import { Component } from "react";
-import axios from "axios";
+import { PropTypes } from "prop-types";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
-export default class Home extends Component {
+class Home extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { posts: [] };
 	}
 
-	componentDidMount() {
-		axios
-			.get("https://jsonplaceholder.typicode.com/posts")
-			.then(({ data: posts }) => {
-				this.setState({ posts });
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	}
+	static propTypes = { posts: PropTypes.array };
+
 	render() {
-		const postList = this.state.posts.length ? (
+		const postList = this.props.posts.length ? (
 			<div className="d-flex flex-column">
-				{this.state.posts.map((post) => (
+				{this.props.posts.map((post) => (
 					<div className="card blue-grey darken-1" key={post.id}>
 						<div className="card-content white-text">
 							<Link to={`/posts/${post.id}`}>
@@ -45,3 +37,9 @@ export default class Home extends Component {
 		);
 	}
 }
+
+const mapStateToProps = (state) => {
+	return { posts: state.posts };
+};
+
+export default connect(mapStateToProps)(Home);

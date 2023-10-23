@@ -1,36 +1,58 @@
-import axios from "axios";
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Component } from "react";
+import { connect } from "react-redux";
+import { PropTypes } from "prop-types";
+import { Navigate } from "react-router-dom";
 
-function Post() {
-	let params = useParams();
-	const [post, setPost] = useState();
+class Post extends Component {
+	constructor(props) {
+		super(props);
+		this.handleClick = this.handleClick.bind(this);
+	}
+	static propTypes = {
+		post: PropTypes.object,
+		deletePost: PropTypes.func,
+	};
 
-	useEffect(() => {
-		axios
-			.get(`https://jsonplaceholder.typicode.com/posts/${params.post_id}`)
-			.then(({ data: post }) => {
-				setPost(post);
-			})
-			.catch((error) => console.error(error));
-	}, [params.post_id]);
+	handleClick() {
+		this.props.deletePost(this.props.post.id);
+		window.location.pathname = "/";
+	}
 
-	return (
-		<div className="container">
-			<div className="card blue-grey darken-1">
-				{post ? (
-					<div className="card-content white-text">
-						<span className="card-title">{post.title}</span>
-						<p>{post.body}</p>
-					</div>
-				) : (
-					<span className="card-title white-text">Loading ...</span>
-				)}
-
-				<div className="card-action"></div>
+	render() {
+		return (
+			<div className="container">
+				<div className="card blue-grey darken-1">
+					{this.props?.post ? (
+						<>
+							<div className="card-content white-text">
+								<span className="card-title">{this.props?.post.title}</span>
+								<p>{this.props?.post.body}</p>
+							</div>
+							<div className="card-action">
+								<button type="button" className="btn btn-gray" onClick={this.handleClick}>
+									Delete post
+								</button>
+							</div>
+						</>
+					) : (
+						<span className="card-title white-text">Loading ...</span>
+					)}
+				</div>
 			</div>
-		</div>
-	);
+		);
+	}
 }
 
-export default Post;
+const mapStateToProps = (state) => {
+	let { pathname } = window.location;
+
+	let id = pathname.split("/").reverse()[0];
+	return { post: state.posts.filter((post) => post.id == id)[0] };
+};
+
+const mapSispatchToProps = (dispatch) => {
+	return { deletePost: (id) => dispatch({ type: "DELETE_POST", id }) };
+};
+
+// eslint-disable-next-line react-refresh/only-export-components
+export default connect(mapStateToProps, mapSispatchToProps)(Post);
