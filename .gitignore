@@ -1,1 +1,27 @@
 *node_modules
+*bin
+*.json
+*obj
+*.vtt
+*debug
+*.txt
+# Binaries for programs and plugins
+*.exe
+*.dll
+*.so
+*.dylib
+# Test binary, built with `go test -c`
+*.test
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+# Dependency directories
+vendor/
+*.ipynb
+*.csv
+*.deb
+*.pdf
+*.zip*
+*.xlsx
+args
+memory
+*.c

@@ -1,0 +1,6 @@
+GET http://localhost:5051/
+Content-Type: application/json
+
+{
+    "message":"Hello"
+}
